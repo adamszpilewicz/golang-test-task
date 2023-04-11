@@ -55,11 +55,13 @@ func (r *RabbitMQConnection) Connect() error {
 	return nil
 }
 
+// Close closes the connection to RabbitMQ
 func (r *RabbitMQConnection) Close() {
 	r.ch.Close()
 	r.conn.Close()
 }
 
+// Publish publishes a message to RabbitMQ
 func (r *RabbitMQConnection) Publish(msg Message) error {
 	body, err := json.Marshal(msg)
 	if err != nil {

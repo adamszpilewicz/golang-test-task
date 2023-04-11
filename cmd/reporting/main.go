@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v8"
+	"log"
 )
 
 const (
@@ -84,5 +85,5 @@ func main() {
 		c.JSON(200, response)
 	})
 
-	r.Run(apiPort)
+	log.Fatal(r.Run(apiPort))
 }

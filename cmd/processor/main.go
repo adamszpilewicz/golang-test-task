@@ -16,12 +16,14 @@ const (
 	messageQueueName = "message_queue"
 )
 
+// Message is the message object that will be sent between users
 type Message struct {
 	Sender   string `json:"sender"`
 	Receiver string `json:"receiver"`
 	Content  string `json:"message"`
 }
 
+// MessageProcessor is the processor that will be used to process messages
 type MessageProcessor struct {
 	conn *amqp.Connection
 	ch   *amqp.Channel
@@ -29,6 +31,7 @@ type MessageProcessor struct {
 	rdb  *redis.Client
 }
 
+// Connect connects to RabbitMQ and Redis
 func (mp *MessageProcessor) Connect() error {
 	var err error
 	mp.conn, err = amqp.Dial(amqpURL)
@@ -62,12 +65,14 @@ func (mp *MessageProcessor) Connect() error {
 	return nil
 }
 
+// Close closes the connection to RabbitMQ and Redis
 func (mp *MessageProcessor) Close() {
 	mp.ch.Close()
 	mp.conn.Close()
 	mp.rdb.Close()
 }
 
+// ProcessMessages processes messages from RabbitMQ
 func (mp *MessageProcessor) ProcessMessages() (<-chan amqp.Delivery, error) {
 	return mp.ch.Consume(
 		mp.q.Name,
@@ -80,6 +85,7 @@ func (mp *MessageProcessor) ProcessMessages() (<-chan amqp.Delivery, error) {
 	)
 }
 
+// SaveMessageToRedis saves a message to Redis
 func (mp *MessageProcessor) SaveMessageToRedis(msg Message) error {
 	key := msg.Sender + "_" + msg.Receiver
 	value, _ := json.Marshal(msg)

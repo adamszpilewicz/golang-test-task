@@ -9,5 +9,5 @@ docker-compose up -d
 }
 ```
 
-- GET endpoint: `localhost:8088/message?sender=Adam&receiver=Rena`
+- GET endpoint: `localhost:8089/message/list?sender=Adam&receiver=Rena`
 
